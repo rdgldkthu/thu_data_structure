@@ -1,67 +1,53 @@
 #include <iostream>
 #include <vector>
+#include <set>
 using namespace std;
-
-bool notInVector(vector<int> v, int num)
-{
-    for (auto& itr : v)
-    {
-        if (itr == num)
-        {
-            return false;
-        }
-    }
-    return true;
-}
 
 int main()
 {
     int n; //number of ships
     int t; //time of arrival
     int k; //number of passengers
-    vector<vector<int>> x; //each passenger's nationality
-    vector<int> nationalities; //all the nationalities arrived within 24 hours
+    vector<vector<int>> passengersInShips; //each passenger's nationality    
 
-    //input n
+    //input number of ships, reserve vector capacity
     cin >> n;
-    x.reserve(n);
+    passengersInShips.reserve(n);
 
     for (int i = 0; i < n; i++)
     {
-        //input time, number of passengers
         cin >> t >> k;
-        x.push_back(vector<int>());
-        x[i].reserve(k + 1);
-        x[i].push_back(t);
+        
+        passengersInShips.push_back(vector<int>());
+        passengersInShips[i].reserve(k + 1);
+        passengersInShips[i].push_back(t);
 
+        int temp;
         //input each passenger's nationality
-        for (int j = 0; j < k; j++)
-        {
-            int nat; //nationality
-            cin >> nat;
-            x[i].push_back(nat);
+        for (int j = 1; j < k + 1; j++)
+        {          
+            cin >> temp;
+            passengersInShips[i].push_back(temp);
         }
 
-        //add unique nationalities to nats
-        for (const auto& ship : x)
+        int startTime = t - 86400; //starting point of time
+        set<int> uniqueNationalities; //unique nationalities
+
+        //add unique nationalities to nationalities
+        for (auto& ship : passengersInShips)
         {
             //check to only iterate through ships that came within 24 hours
-            if (ship[0] > t - 86400 && ship[0] <= t)
+            if (ship[0] > startTime)
             {
-                for (auto passenger = ship.begin() + 1; passenger != ship.end(); passenger++)
+                for (auto p = ship.begin() + 1; p != ship.end(); p++)
                 {
-                    if (notInVector(nationalities, *passenger))
-                    {
-                        nationalities.push_back(*passenger);
-                    }
+                    uniqueNationalities.insert(*p);
                 }
             }
         }
 
-        //print, reset nationalities
-        cout << nationalities.size() << endl;
-        nationalities.clear();
-        nationalities.shrink_to_fit();
+        //print result
+        cout << uniqueNationalities.size() << endl;
     }
 }
 /* REFERENCES
