@@ -1,64 +1,68 @@
 #include <iostream>
 #include <vector>
-#include <set>
 using namespace std;
+
+bool notInVector(vector<int> v, int num)
+{
+    for (auto& itr : v)
+    {
+        if (itr == num)
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 int main()
 {
     int n; //number of ships
     int t; //time of arrival
     int k; //number of passengers
-    vector<int> timeStamps; //
-    vector<int> ships; //each passenger's nationality    
+    vector<vector<int>> x; //each passenger's nationality
+    vector<int> nationalities; //all the nationalities arrived within 24 hours
 
-    //input number of ships
+    //input n
     cin >> n;
+    x.reserve(n);
 
-    //input and store ships data
     for (int i = 0; i < n; i++)
     {
+        //input time, number of passengers
         cin >> t >> k;
+        x.push_back(vector<int>());
+        x[i].reserve(k + 1);
+        x[i].push_back(t);
 
-        timeStamps.push_back(t * -1);
-        ships.push_back(t * -1);
-
-        int temp;
         //input each passenger's nationality
         for (int j = 0; j < k; j++)
         {
-            cin >> temp;
-            ships.push_back(temp);
+            int nat; //nationality
+            cin >> nat;
+            x[i].push_back(nat);
         }
-    }
 
-    bool toggleInsert = false; //if true, insert data to uniqueNationalities
-    for (auto& arrivalTime : timeStamps)
-    {
-        set<int> uniqueNationalities; //unique nationalities
-        int endTime = arrivalTime; //actual end time * -1
-        int startTime = endTime + 86400; //actual start time * -1
-
-        for (auto& data : ships)
+        //add unique nationalities to nats
+        for (const auto& ship : x)
         {
-            if (data < 0)
+            //check to only iterate through ships that came within 24 hours
+            if (ship[0] > t - 86400 && ship[0] <= t)
             {
-                if ((data < startTime) && (data >= endTime))
+                for (auto passenger = ship.begin() + 1; passenger != ship.end(); passenger++)
                 {
-                    toggleInsert = true;
+                    if (notInVector(nationalities, *passenger))
+                    {
+                        nationalities.push_back(*passenger);
+                    }
                 }
-                else
-                {
-                    toggleInsert = false;
-                }
-            }
-            if (toggleInsert && data > 0)
-            {
-                uniqueNationalities.insert(data);
             }
         }
-        //print result
-        cout << uniqueNationalities.size() << endl;
-    }   
+
+        //print, reset nationalities
+        cout << nationalities.size() << endl;
+        nationalities.clear();
+        nationalities.shrink_to_fit();
+    }
 }
 /* REFERENCES
 https://doompa.tistory.com/286
