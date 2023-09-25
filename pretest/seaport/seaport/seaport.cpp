@@ -8,47 +8,57 @@ int main()
     int n; //number of ships
     int t; //time of arrival
     int k; //number of passengers
-    vector<vector<int>> passengersInShips; //each passenger's nationality    
+    vector<int> timeStamps; //
+    vector<int> ships; //each passenger's nationality    
 
-    //input number of ships, reserve vector capacity
+    //input number of ships
     cin >> n;
-    passengersInShips.reserve(n);
 
+    //input and store ships data
     for (int i = 0; i < n; i++)
     {
         cin >> t >> k;
-        
-        passengersInShips.push_back(vector<int>());
-        passengersInShips[i].reserve(k + 1);
-        passengersInShips[i].push_back(t);
+
+        timeStamps.push_back(t * -1);
+        ships.push_back(t * -1);
 
         int temp;
         //input each passenger's nationality
-        for (int j = 1; j < k + 1; j++)
-        {          
-            cin >> temp;
-            passengersInShips[i].push_back(temp);
-        }
-
-        int startTime = t - 86400; //starting point of time
-        set<int> uniqueNationalities; //unique nationalities
-
-        //add unique nationalities to nationalities
-        for (auto& ship : passengersInShips)
+        for (int j = 0; j < k; j++)
         {
-            //check to only iterate through ships that came within 24 hours
-            if (ship[0] > startTime)
+            cin >> temp;
+            ships.push_back(temp);
+        }
+    }
+
+    bool toggleInsert = false; //if true, insert data to uniqueNationalities
+    for (auto& arrivalTime : timeStamps)
+    {
+        set<int> uniqueNationalities; //unique nationalities
+        int endTime = arrivalTime; //actual end time * -1
+        int startTime = endTime + 86400; //actual start time * -1
+
+        for (auto& data : ships)
+        {
+            if (data < 0)
             {
-                for (auto p = ship.begin() + 1; p != ship.end(); p++)
+                if ((data < startTime) && (data >= endTime))
                 {
-                    uniqueNationalities.insert(*p);
+                    toggleInsert = true;
+                }
+                else
+                {
+                    toggleInsert = false;
                 }
             }
+            if (toggleInsert && data > 0)
+            {
+                uniqueNationalities.insert(data);
+            }
         }
-
         //print result
         cout << uniqueNationalities.size() << endl;
-    }
+    }   
 }
 /* REFERENCES
 https://doompa.tistory.com/286
