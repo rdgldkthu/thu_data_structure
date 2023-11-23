@@ -1,4 +1,6 @@
 #include <iostream>
+#define MAX_TIME_START 50000
+#define MAX_TIME_NEEDED 2000
 using namespace std;
 
 //class for people crossing the bridge
@@ -118,13 +120,15 @@ int main() {
 		//the time when the head person is supposed to get off the bridge 
 		//if someone who came later than this time is added, then head will be removed from queue
 		int head_leave_time;
-		if (bridge.head == nullptr) { head_leave_time = 60000; }
+		if (bridge.head == nullptr) { head_leave_time = MAX_TIME_START + MAX_TIME_NEEDED; }
 		else { head_leave_time = bridge.head->GetTS() + bridge.head->GetTN(); }
 		//remove people that have crossed the bridge already
 		while (time_start >= head_leave_time) {
 			bridge.dequeue();
-			if (bridge.head == nullptr) { head_leave_time = 60000; }
+			if (bridge.head == nullptr) { head_leave_time = MAX_TIME_START + MAX_TIME_NEEDED; }
 			else { head_leave_time = bridge.head->GetTS() + bridge.head->GetTN(); }
 		}
 	}
+	//if everyone has crossed the bridge safely, print out "safe"
+	cout << "safe" << endl;
 }
