@@ -1,18 +1,10 @@
 #include <iostream>
 using namespace std;
 
-class Node {
-private:
+struct Node {
     int data;
-public:
     Node* next;
-    Node(int d) {
-        data = d;
-        next = nullptr;
-    }
-    int getData() {
-        return data;
-    }
+    Node(int d) : data(d), next(NULL) {}
 };
 
 //function to create a circular linked list with N nodes
@@ -36,9 +28,9 @@ void removeNextNode(Node* prev) {
 /* functions used for debugging
 void deleteCircle(Node* head) {
     Node* temp = head->next;
-    head->next = nullptr;
+    head->next = NULL;
     Node* nextTemp;
-    while (temp != nullptr) {
+    while (temp != NULL) {
         nextTemp = temp->next;
         delete temp;
         temp = nextTemp;
@@ -48,7 +40,7 @@ void deleteCircle(Node* head) {
 void printCircle(Node* head, int N) {
     Node* itr = head;
     while (N--) {
-        cout << itr->getData();
+        cout << itr->data;
         itr = itr->next;
     }
     cout << endl;
@@ -78,7 +70,7 @@ int main()
     }
 
     //print result
-    cout << itr->getData();
+    cout << itr->data;
     delete itr;
     return 0;
 }
