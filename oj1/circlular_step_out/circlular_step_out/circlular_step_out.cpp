@@ -47,8 +47,7 @@ void printCircle(Node* head, int N) {
 }
 */
 
-int main()
-{
+int main() {
     //number of people in the line, number of steps before step out
     int N, M; 
     cin >> N >> M;
