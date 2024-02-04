@@ -50,8 +50,6 @@ int BFS(vertex s, vertex e, graph g) {
         vertex temp = q.front();
         int d = temp.data;
         q.pop();
-        //        if(d == e.data)
-        //            return 1;
         for (int i = 0; i < temp.outDegree; i++) {
             int tmp = (g.E)[d][i].end;
             if ((g.V)[tmp].status)
@@ -82,8 +80,6 @@ int main(int argc, const char* argv[]) {
     }
     graph temp = G;
     int Circle = 0;
-    //    int output[N];
-    //    int j = 0;
     while (temp.num > 0) {
         int flag = 0;
         for (auto& i : temp.V) {
@@ -91,8 +87,6 @@ int main(int argc, const char* argv[]) {
                 for (auto x : (temp.E)[i.data]) {
                     (temp.V)[x.end].inDegree--;
                 }
-                //                output[j] = i.data;
-                //                j++;
                 i.data = -1;
                 temp.num--;
                 flag = 1;
@@ -104,10 +98,6 @@ int main(int argc, const char* argv[]) {
             break;
         }
     }
-    //    for(int i = 0; i < N; i++)
-    //    {
-    //        cout << output[i] << " ";
-    //    }
     int search[K][2];
     for (int i = 0; i < K; i++) {
         cin >> search[i][0] >> search[i][1];
